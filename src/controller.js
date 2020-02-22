@@ -18,7 +18,7 @@ io.on('connection', function(socket){
     websocket = socket;
 
     // first make sure a password is provided.
-    websocket.on('hello', (data, ack) => {
+    websocket.once('hello', (data, ack) => {
 
         ack = ack || function() {};
 
@@ -35,17 +35,26 @@ io.on('connection', function(socket){
 
             ack = ack || function() {};
 
+            if (!globalCamera) {
+                ack({
+                    error: 'No camera detected.'
+                });
+                return;
+            }
+
             let name = 'image-';
             if (typeof(data.name) !== 'undefined') {
                 name = slugify(data.name);
             }
 
             // Take picture with camera object obtained from list()
+            console.log('Taking picture', name);
             globalCamera.takePicture({download: true}, function (er, data) {
-                fs.writeFileSync(Config.pictureDir + name + getImageIdentifier() + '.jpg', data);
+                let pathName = name + '-' + getImageIdentifier() + '.jpg';
+                fs.writeFileSync(Config.pictureDir + pathName, data);
 
                 ack({
-                    file: name
+                    file: 'images/' + pathName
                 });
 
             });
@@ -54,6 +63,11 @@ io.on('connection', function(socket){
     });
 
 });
+
+function pad(num, size) {
+    var s = "0000" + num;
+    return s.substr(s.length-size);
+}
 
 GPhoto.list((list) => {
     if (list.length === 0) return;
@@ -81,6 +95,6 @@ function getImageIdentifier() {
     counter ++;
     fs.writeFileSync(counterFilename, counter);
 
-    return counter;
+    return pad(counter, 4);
 }
 //exports.controller = controller;
