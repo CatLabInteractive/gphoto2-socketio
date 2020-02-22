@@ -1,8 +1,14 @@
 const { server, io } = require('./server.js');
 
+var fs = require('fs');
+var gphoto2 = require('gphoto2');
+var GPhoto = new gphoto2.GPhoto2();
+var slugify = require('slugify')
+
 const { Config } = require('./config');
 
 let websocket;
+let globalCamera;
 
 console.log('Password: ', Config.password);
 
@@ -29,13 +35,52 @@ io.on('connection', function(socket){
 
             ack = ack || function() {};
 
+            let name = 'image-';
+            if (typeof(data.name) !== 'undefined') {
+                name = slugify(data.name);
+            }
 
+            // Take picture with camera object obtained from list()
+            globalCamera.takePicture({download: true}, function (er, data) {
+                fs.writeFileSync(Config.pictureDir + name + getImageIdentifier() + '.jpg', data);
+
+                ack({
+                    file: name
+                });
+
+            });
         });
 
     });
 
 });
 
+GPhoto.list((list) => {
+    if (list.length === 0) return;
+    var camera = list[0];
+    console.log('Found', camera.model);
 
+    // get configuration tree
+    camera.getConfig(function (er, settings) {
+        console.log(settings);
+    });
 
+    globalCamera = camera;
+});
+
+function getImageIdentifier() {
+    let counterFilename = Config.pictureDir + 'counter';
+    let counter = 0;
+
+    try {
+        counter = fs.readFileSync(counterFilename);
+    } catch (e) {
+
+    }
+
+    counter ++;
+    fs.writeFileSync(counterFilename, counter);
+
+    return counter;
+}
 //exports.controller = controller;

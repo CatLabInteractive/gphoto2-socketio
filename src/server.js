@@ -1,6 +1,9 @@
-const app = require('express')();
+const express = require('express');
+const app = express();
 const fs = require('fs');
 const tls = require('tls');
+const { Config } = require('./config');
+
 
 var httpPort = process.env.PORT || 3000;
 
@@ -46,6 +49,9 @@ if (process.env.SSL_CERTIFICATE && fs.existsSync(process.env.SSL_PRIVATE_KEY)) {
 }
 
 var io = require('socket.io')(http);
+
+app.use('/images', express.static(Config.pictureDir)); //Serves resources from public folder
+
 
 exports.http = http;
 exports.io = io;
