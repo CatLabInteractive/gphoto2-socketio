@@ -58,9 +58,9 @@ io.on('connection', function(socket){
                     keep: keep
                 }, function (er, data) {
 
-                    if (err) {
+                    if (er) {
                         ack({
-                            error: e.message
+                            error: er.message
                         });
                         return;
                     }
