@@ -77,6 +77,10 @@ setInterval(
                 return;
             }
 
+            if (globalCamera) {
+                return;
+            }
+
             var camera = list[0];
 
             console.log('Found', camera.model);
