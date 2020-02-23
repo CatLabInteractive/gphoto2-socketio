@@ -50,15 +50,28 @@ io.on('connection', function(socket){
 
             // Take picture with camera object obtained from list()
             console.log('Taking picture', name);
-            globalCamera.takePicture({download: true}, function (er, data) {
-                let pathName = name + '-' + getImageIdentifier() + '.jpg';
-                fs.writeFileSync(Config.pictureDir + pathName, data);
+            var tries = 3;
 
-                ack({
-                    file: 'images/' + pathName
-                });
+            while (tries > 0) {
+                try {
+                    globalCamera.takePicture({download: true}, function (er, data) {
+                        let pathName = name + '-' + getImageIdentifier() + '.jpg';
+                        fs.writeFileSync(Config.pictureDir + pathName, data);
 
-            });
+                        ack({
+                            file: 'images/' + pathName
+                        });
+
+                    });
+                } catch (e) {
+                    console.error(e);
+                    tries --;
+
+                    ack({
+                        error: e.message
+                    });
+                }
+            }
         });
 
     });
