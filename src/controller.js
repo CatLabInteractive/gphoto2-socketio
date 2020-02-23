@@ -57,6 +57,14 @@ io.on('connection', function(socket){
                     download: true,
                     keep: keep
                 }, function (er, data) {
+
+                    if (err) {
+                        ack({
+                            error: e.message
+                        });
+                        return;
+                    }
+
                     let pathName = name + '-' + getImageIdentifier() + '.jpg';
                     fs.writeFileSync(Config.pictureDir + pathName, data);
 
