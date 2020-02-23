@@ -95,7 +95,7 @@ setInterval(
             globalCamera = camera;
         });
     },
-    5000
+    1000
 );
 
 function getImageIdentifier() {
