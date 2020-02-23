@@ -69,18 +69,28 @@ function pad(num, size) {
     return s.substr(s.length-size);
 }
 
-GPhoto.list((list) => {
-    if (list.length === 0) return;
-    var camera = list[0];
-    console.log('Found', camera.model);
+setInterval(
+    () => {
+        GPhoto.list((list) => {
+            if (list.length === 0) return;
 
-    // get configuration tree
-    camera.getConfig(function (er, settings) {
-        console.log(settings);
-    });
+            var camera = list[0];
+            if (camera === globalCamera) {
+                return;
+            }
 
-    globalCamera = camera;
-});
+            console.log('Found', camera.model);
+
+            // get configuration tree
+            camera.getConfig(function (er, settings) {
+                console.log(settings);
+            });
+
+            globalCamera = camera;
+        });
+    },
+    5000
+);
 
 function getImageIdentifier() {
     let counterFilename = Config.pictureDir + 'counter';
