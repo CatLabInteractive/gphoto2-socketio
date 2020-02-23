@@ -47,13 +47,18 @@ io.on('connection', function(socket){
                 name = slugify(data.name);
             }
 
+            let keep = typeof(data.keep) !== 'undefined' ? !!data.keep : false;
+
             // Take picture with camera object obtained from list()
             console.log('Taking picture', name);
             var tries = 3;
 
             while (tries > 0) {
                 try {
-                    globalCamera.takePicture({download: true}, function (er, data) {
+                    globalCamera.takePicture({
+                        download: true,
+                        keep: keep
+                    }, function (er, data) {
                         let pathName = name + '-' + getImageIdentifier() + '.jpg';
                         fs.writeFileSync(Config.pictureDir + pathName, data);
 
@@ -64,14 +69,16 @@ io.on('connection', function(socket){
                     });
                 } catch (e) {
 
+                    tries --;
                     checkForCamera();
 
                     console.error(e);
-                    tries --;
 
-                    ack({
-                        error: e.message
-                    });
+                    if (tries === 0) {
+                        ack({
+                            error: e.message
+                        });
+                    }
                 }
             }
         });
