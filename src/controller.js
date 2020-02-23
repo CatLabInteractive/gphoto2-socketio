@@ -90,12 +90,7 @@ function checkForCamera() {
             return;
         }
 
-        if (globalCamera) {
-            return;
-        }
-
         var camera = list[0];
-
         console.log('Found', camera.model);
 
         // get configuration tree
