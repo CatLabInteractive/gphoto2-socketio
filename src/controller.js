@@ -62,6 +62,7 @@ io.on('connection', function(socket){
                         ack({
                             error: er.message
                         });
+                        console.error(er);
                         return;
                     }
 
@@ -74,7 +75,9 @@ io.on('connection', function(socket){
 
                 });
             } catch (e) {
+                console.error(e);
                 checkForCamera();
+
                 ack({
                     error: e.message
                 });
