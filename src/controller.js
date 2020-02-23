@@ -14,6 +14,7 @@ console.log('Password: ', Config.password);
 
 io.on('connection', function(socket){
     console.log('a user connected');
+    checkForCamera();
 
     websocket = socket;
 
@@ -69,34 +70,31 @@ function pad(num, size) {
     return s.substr(s.length-size);
 }
 
-setInterval(
-    () => {
-        GPhoto.list((list) => {
-            if (list.length === 0) {
-                globalCamera = null;
-                return;
-            }
+function checkForCamera() {
+    GPhoto.list((list) => {
+        if (list.length === 0) {
+            globalCamera = null;
+            return;
+        }
 
-            if (globalCamera) {
-                return;
-            }
+        if (globalCamera) {
+            return;
+        }
 
-            var camera = list[0];
+        var camera = list[0];
 
-            console.log('Found', camera.model);
+        console.log('Found', camera.model);
 
-            // get configuration tree
-            /*
-            camera.getConfig(function (er, settings) {
-                console.log(settings);
-            });
-             */
-
-            globalCamera = camera;
+        // get configuration tree
+        /*
+        camera.getConfig(function (er, settings) {
+            console.log(settings);
         });
-    },
-    1000
-);
+         */
+
+        globalCamera = camera;
+    });
+}
 
 function getImageIdentifier() {
     let counterFilename = Config.pictureDir + 'counter';
