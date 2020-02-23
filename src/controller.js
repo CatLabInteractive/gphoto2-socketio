@@ -14,7 +14,6 @@ console.log('Password: ', Config.password);
 
 io.on('connection', function(socket){
     console.log('a user connected');
-    checkForCamera();
 
     websocket = socket;
 
@@ -64,6 +63,9 @@ io.on('connection', function(socket){
 
                     });
                 } catch (e) {
+
+                    checkForCamera();
+
                     console.error(e);
                     tries --;
 
@@ -84,6 +86,7 @@ function pad(num, size) {
 }
 
 function checkForCamera() {
+    console.log('Looking for camera');
     GPhoto.list((list) => {
         if (list.length === 0) {
             globalCamera = null;
@@ -119,4 +122,6 @@ function getImageIdentifier() {
 
     return pad(counter, 4);
 }
+
+checkForCamera();
 //exports.controller = controller;
