@@ -72,19 +72,21 @@ function pad(num, size) {
 setInterval(
     () => {
         GPhoto.list((list) => {
-            if (list.length === 0) return;
-
-            var camera = list[0];
-            if (camera === globalCamera) {
+            if (list.length === 0) {
+                globalCamera = null;
                 return;
             }
+
+            var camera = list[0];
 
             console.log('Found', camera.model);
 
             // get configuration tree
+            /*
             camera.getConfig(function (er, settings) {
                 console.log(settings);
             });
+             */
 
             globalCamera = camera;
         });
