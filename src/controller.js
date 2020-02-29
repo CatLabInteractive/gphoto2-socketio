@@ -30,6 +30,44 @@ io.on('connection', function(socket){
 
         ack({ success: true });
 
+        // List photos
+        websocket.on('photo:list', async (data, ack) => {
+
+            var file = Config.pictureDir;
+
+            fs.readdir(Config.pictureDir, function(err, files) {
+
+                if (err) {
+                    ack({
+                        error: 'No camera detected.'
+                    });
+                    return;
+                }
+
+                ack({
+                    files: files.filter((item) => {
+                        if (item[0] === '.') {
+                            return false;
+                        }
+
+                        if (item === 'counter') {
+                            return false;
+                        }
+
+                        if (item.substr(item.length -3) === 'jpg') {
+                            return false;
+                        }
+
+                        return true;
+                    }).map((item) => {
+                        return 'images/' + item;
+                    })
+                })
+
+            });
+
+        });
+
         // Now listen for commands.
         websocket.on('photo:takePicture', async (data, ack) => {
 
