@@ -32,32 +32,11 @@ io.on('connection', function(socket){
 
         // List photos
         websocket.on('photo:list', async (data, ack) => {
-            fs.readdir(Config.pictureDir, function(err, files) {
-                ack({
-                    files: files.filter((item) => {
-                        if (item[0] === '.') {
-                            return false;
-                        }
 
-                        if (item === 'counter') {
-                            return false;
-                        }
-
-                        if (item.substr(item.length -3) === 'jpg') {
-                            return false;
-                        }
-
-                        return true;
-                    }).map((item) => {
-                        return {
-                            file: 'images/' + item,
-                            name: item.substr(0, items.indexOf('-'))
-                        };
-                    })
-                })
-
+            let items = await getExistingPictures();
+            ack({
+                files: items
             });
-
         });
 
         // Now listen for commands.
@@ -161,5 +140,38 @@ function getImageIdentifier() {
     return pad(counter, 4);
 }
 
+function getExistingPictures() {
+    return new Promise(
+        (resolve, reject) => {
+
+            fs.readdir(Config.pictureDir, (err, files) => {
+
+                resolve(files.filter((item) => {
+                        if (item[0] === '.') {
+                            return false;
+                        }
+
+                        if (item === 'counter') {
+                            return false;
+                        }
+
+                        if (item.substr(item.length -3) === 'jpg') {
+                            return false;
+                        }
+
+                        return true;
+                    }).map((item) => {
+                        return {
+                            file: 'images/' + item,
+                            name: item.substr(0, item.indexOf('-'))
+                        };
+                    })
+                );
+            });
+        }
+    );
+}
+
 checkForCamera();
+getExistingPictures().then(console.log);
 //exports.controller = controller;
