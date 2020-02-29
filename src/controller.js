@@ -32,9 +32,6 @@ io.on('connection', function(socket){
 
         // List photos
         websocket.on('photo:list', async (data, ack) => {
-
-            var file = Config.pictureDir;
-
             fs.readdir(Config.pictureDir, function(err, files) {
 
                 if (err) {
@@ -60,7 +57,10 @@ io.on('connection', function(socket){
 
                         return true;
                     }).map((item) => {
-                        return 'images/' + item;
+                        return {
+                            file: 'images/' + item,
+                            name: item.substr(0, items.indexOf('-'))
+                        };
                     })
                 })
 
