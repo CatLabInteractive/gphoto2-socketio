@@ -156,13 +156,11 @@ function getExistingPictures() {
                         return false;
                     }
 
-                    /*
-                    if (item.substr(item.length -3) === 'jpg') {
-                        return false;
+                    if (item.substr(-3) === 'jpg') {
+                        return true;
                     }
-                     */
 
-                    return true;
+                    return false;
                 }).map((item) => {
                     return {
                         file: 'images/' + item,
