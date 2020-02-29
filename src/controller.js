@@ -33,14 +33,6 @@ io.on('connection', function(socket){
         // List photos
         websocket.on('photo:list', async (data, ack) => {
             fs.readdir(Config.pictureDir, function(err, files) {
-
-                if (err) {
-                    ack({
-                        error: 'No camera detected.'
-                    });
-                    return;
-                }
-
                 ack({
                     files: files.filter((item) => {
                         if (item[0] === '.') {
