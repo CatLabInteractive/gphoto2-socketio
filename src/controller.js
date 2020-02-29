@@ -147,31 +147,30 @@ function getExistingPictures() {
             fs.readdir(Config.pictureDir, (err, files) => {
 
                 resolve(files.filter((item) => {
-                        if (item[0] === '.') {
-                            return false;
-                        }
+                    console.log(item);
+                    if (item[0] === '.') {
+                        return false;
+                    }
 
-                        if (item === 'counter') {
-                            return false;
-                        }
+                    if (item === 'counter') {
+                        return false;
+                    }
 
-                        if (item.substr(item.length -3) === 'jpg') {
-                            return false;
-                        }
+                    if (item.substr(item.length -3) === 'jpg') {
+                        return false;
+                    }
 
-                        return true;
-                    }).map((item) => {
-                        return {
-                            file: 'images/' + item,
-                            name: item.substr(0, item.indexOf('-'))
-                        };
-                    })
-                );
-            });
-        }
-    );
+                    return true;
+                }).map((item) => {
+                    return {
+                        file: 'images/' + item,
+                        name: item.substr(0, item.indexOf('-'))
+                    };
+                })
+            );
+        });
+    });
 }
 
 checkForCamera();
-getExistingPictures().then(console.log);
 //exports.controller = controller;
