@@ -156,9 +156,11 @@ function getExistingPictures() {
                         return false;
                     }
 
+                    /*
                     if (item.substr(item.length -3) === 'jpg') {
                         return false;
                     }
+                     */
 
                     return true;
                 }).map((item) => {
