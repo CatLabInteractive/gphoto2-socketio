@@ -173,4 +173,5 @@ function getExistingPictures() {
 }
 
 checkForCamera();
+getExistingPictures().then(console.log);
 //exports.controller = controller;
