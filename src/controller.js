@@ -147,7 +147,6 @@ function getExistingPictures() {
             fs.readdir(Config.pictureDir, (err, files) => {
 
                 resolve(files.filter((item) => {
-                    console.log(item);
                     if (item[0] === '.') {
                         return false;
                     }
@@ -173,5 +172,5 @@ function getExistingPictures() {
 }
 
 checkForCamera();
-getExistingPictures().then(console.log);
+//getExistingPictures().then(console.log);
 //exports.controller = controller;
