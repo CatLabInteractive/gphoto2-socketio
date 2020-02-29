@@ -3,9 +3,12 @@ const app = express();
 const fs = require('fs');
 const tls = require('tls');
 const { Config } = require('./config');
-
+var cors = require('cors');
 
 var httpPort = process.env.PORT || 3000;
+
+app.use(cors());
+app.options('*', cors());
 
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/public/index.html');

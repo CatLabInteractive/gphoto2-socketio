@@ -3,7 +3,7 @@ const { server, io } = require('./server.js');
 var fs = require('fs');
 var gphoto2 = require('gphoto2');
 var GPhoto = new gphoto2.GPhoto2();
-var slugify = require('slugify')
+var slugify = require('slugify');
 
 const { Config } = require('./config');
 
