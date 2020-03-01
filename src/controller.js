@@ -60,6 +60,8 @@ io.on('connection', function(socket){
             }
 
             var file = Config.pictureDir + data.file;
+            console.log('Removing ', file);
+
             if (fs.existsSync(file)) {
                 fs.unlinkSync(file);
                 ack({
