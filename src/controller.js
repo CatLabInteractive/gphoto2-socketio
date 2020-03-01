@@ -50,7 +50,7 @@ io.on('connection', function(socket){
                 return;
             }
 
-            if (data.file[0] === '.' || data.file[0] === '/' || data.file[0] === '\\') {
+            if (data.file.substr(0, 7) !== 'images/') {
                 ack({
                     error: {
                         message: 'No filename provided.'
@@ -59,7 +59,18 @@ io.on('connection', function(socket){
                 return;
             }
 
-            var file = Config.pictureDir + data.file;
+            var fileName = data.file.substr(7);
+
+            if (fileName === '.' || fileName === '/' || fileName === '\\') {
+                ack({
+                    error: {
+                        message: 'No filename provided.'
+                    }
+                });
+                return;
+            }
+
+            var file = Config.pictureDir + fileName;
             console.log('Removing ', file);
 
             if (fs.existsSync(file)) {
