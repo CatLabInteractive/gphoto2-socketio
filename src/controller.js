@@ -39,6 +39,36 @@ io.on('connection', function(socket){
             });
         });
 
+        // List photos
+        websocket.on('photo:remove', async (data, ack) => {
+            if (typeof(data.file) === 'undefined') {
+                ack({
+                    error: {
+                        message: 'No filename provided.'
+                    }
+                });
+                return;
+            }
+
+            var letters = /^[0-9a-zA-Z]+$/;
+            if (!data.file.match(letters)) {
+                ack({
+                    error: {
+                        message: 'No filename provided.'
+                    }
+                });
+                return;
+            }
+
+            var file = Config.pictureDir + data.file;
+            if (fs.existsSync(file)) {
+                fs.unlinkSync(file);
+                ack({
+                    okay: true
+                });
+            }
+        });
+
         // Now listen for commands.
         websocket.on('photo:takePicture', async (data, ack) => {
 
