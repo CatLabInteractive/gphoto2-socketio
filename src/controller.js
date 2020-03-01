@@ -67,6 +67,12 @@ io.on('connection', function(socket){
                 ack({
                     okay: true
                 });
+            } else {
+                ack({
+                    error: {
+                        message: 'File not found..'
+                    }
+                });
             }
         });
 
