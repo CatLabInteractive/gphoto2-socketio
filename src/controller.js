@@ -50,8 +50,7 @@ io.on('connection', function(socket){
                 return;
             }
 
-            var letters = /^[0-9a-zA-Z]+$/;
-            if (!data.file.match(letters)) {
+            if (data.file[0] === '.' || data.file[0] === '/' || data.file[0] === '\\') {
                 ack({
                     error: {
                         message: 'No filename provided.'
