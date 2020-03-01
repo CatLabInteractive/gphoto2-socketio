@@ -70,7 +70,7 @@ io.on('connection', function(socket){
             } else {
                 ack({
                     error: {
-                        message: 'File not found..'
+                        message: 'File not found: ' + file
                     }
                 });
             }
